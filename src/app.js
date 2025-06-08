@@ -1,25 +1,32 @@
 const express = require('express');
 const app = express();
 
-const {adminAuth , userAuth} = require("./Middleware/Auth");
+// error handling
+// app.use("/" , (err,req,res,next)=>{
+//     if(err){
+//         res.status(500).send("Something went wrong");
+//     }
 
-app.use("/admin",adminAuth);
+// });
 
-app.post("/user/login" , (req,res)=>{
-    res.send("Login Successfully !");
+app.get("/getUserData" , (req,res)=>{
+    try{
+        // logic of DB
+        throw new Error("dzeft");
+        res.send("User data sent");
+    }
+    catch(err){
+        res.status(500).send("Something went wrong");
+
+    }
+});
+app.use("/" , (err,req,res,next)=>{
+    if(err){
+        res.status(500).send("Something went wrong");
+    }
+
 });
 
-app.get("/user",userAuth,(req,res)=>{
-    res.send("User data sent");
-})
-
-
-app.get("/admin/getAllData" , (req,res)=>{
-    res.send("All data sent");
-});
-app.get("/admin/deleteAllData",(req,res)=>{
-    res.send("All data Delete");
-});
 
 app.listen(3000 , () => {
     console.log('Server is running on port 3000');
