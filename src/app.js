@@ -1,35 +1,30 @@
 const express = require('express');
 const app = express();
 
-app.use(
-    "/user",
-    (req,res,next) => {
-        console.log("Handling the route /user");
-        // res.send("1st Response");
-        next();
-    },
-    (req,res,next)=>{
-        console.log("Handling the route /user 2 !!");
-        // res.send("2nd Response");
-        next();
-    },
-    (req,res,next)=>{
-        console.log("Handling the route /user 3 !!");
-        // res.send("3rd Response");
-        next();
-    },
-    (req,res,next)=>{
-        console.log("Handling the route /user 4 !!");
-        // res.send("4th Response");
-        next();
-    },
-    (req,res,next)=>{
-        console.log("Handling the route /user 5 !!");
-        res.send("5th Response");
-        // next();
-    },
+// Handle auth middleware for all GET , POST , Delete
 
-)
+app.use("/admin",(req,res,next) => {
+    console.log("Admin auth is getting checked !!");
+    const token = "xyz";
+    const isAdminAuthorized = token == "xyz";
+    if(!isAdminAuthorized){
+        res.status(401).send("Unauthorized Request");
+    }
+    else{
+        next();
+    }
+});
+
+app.get("/user",(req,res)=>{
+    res.send("User data sent");
+})
+
+app.get("/admin/getAllData" , (req,res)=>{
+    res.send("All data sent");
+});
+app.get("/admin/deleteAllData",(req,res)=>{
+    res.send("All data Delete");
+});
 
 app.listen(3000 , () => {
     console.log('Server is running on port 3000');
