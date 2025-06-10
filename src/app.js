@@ -1,33 +1,16 @@
 const express = require('express');
+const connectDB = require('./config/DataBase');
 const app = express();
 
-// error handling
-// app.use("/" , (err,req,res,next)=>{
-//     if(err){
-//         res.status(500).send("Something went wrong");
-//     }
+connectDB()
+    .then(() => {
+        console.log("Database is connected.....");
 
-// });
+        app.listen(3000 , () => {
+        console.log('Server is running on port 3000');
+        });
 
-app.get("/getUserData" , (req,res)=>{
-    try{
-        // logic of DB
-        throw new Error("dzeft");
-        res.send("User data sent");
-    }
-    catch(err){
-        res.status(500).send("Something went wrong");
-
-    }
-});
-app.use("/" , (err,req,res,next)=>{
-    if(err){
-        res.status(500).send("Something went wrong");
-    }
-
-});
-
-
-app.listen(3000 , () => {
-    console.log('Server is running on port 3000');
-});
+    })
+    .catch(()=> {
+        console.error("Database is not connected ......");
+    });
