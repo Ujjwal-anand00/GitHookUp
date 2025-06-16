@@ -24,6 +24,42 @@ app.post("/signup" , async(req , res) => {
     
 });
 
+// Get user by email
+app.get("/user" ,async (req,res) => {
+    const userEmail = req.body.emailId;
+    try{
+        const user = await User.findOne({emailId : userEmail});
+        if(!user){
+            res.status(404).send("User not found !!");
+        }
+        else{
+            res.send(user);
+        }
+        
+        
+    }catch(err){
+        res.status(400).send("Something went WRONG!!!!");
+    }
+});
+
+// Get feed -> get all the users from the database
+
+app.get("/feed" , async (req , res) => {
+    try{
+        const user = await User.find({});
+        if(user.length === 0){
+            res.status(404).send("User not found !!");
+        }
+        else{
+            res.send(user);
+        }
+
+    }catch(err){
+         res.status(400).send("Something went WRONG!!!!");
+    }
+    
+})
+
 connectDB()
     .then(() => {
         console.log("Database is connected.....");
