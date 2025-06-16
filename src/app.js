@@ -25,6 +25,7 @@ app.post("/signup" , async(req , res) => {
 });
 
 // Get user by email
+
 app.get("/user" ,async (req,res) => {
     const userEmail = req.body.emailId;
     try{
@@ -41,6 +42,23 @@ app.get("/user" ,async (req,res) => {
         res.status(400).send("Something went WRONG!!!!");
     }
 });
+
+// Get user by id 
+
+app.get("/userID" , async (req , res) => {
+    const userId = req.body._id;
+    try{
+        const user = await User.findById(userId);
+        if(!user){
+            res.status(404).send("User not found !!!");
+        }
+        else{
+            res.send(user);
+        }
+    }catch(err){
+        res.status(400).send("User not found");
+    }
+})
 
 // Get feed -> get all the users from the database
 
@@ -59,6 +77,35 @@ app.get("/feed" , async (req , res) => {
     }
     
 })
+
+// Delete user from database using _id
+
+app.delete("/user" , async(req , res) => {
+    const userId = req.body.userId;
+    try{
+        const user = await User.findByIdAndDelete(userId);
+        res.send("User Deleted Successfully !!!");
+    }
+    catch(err){
+        res.status(400).send("Something went wrong !!!!");
+    }
+});
+
+// Update data of the user
+
+app.patch("/user" , async(req,res)=>{
+    const userID = req.body.userID;
+    const data = req.body;
+    try{
+        await User.findByIdAndUpdate({_id : userID} , data);
+        res.send("User Updated Successfully !!");
+    }
+    catch(err){
+        res.status(400).send("Something went wrong !!!");
+    }
+});
+
+
 
 connectDB()
     .then(() => {
