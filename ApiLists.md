@@ -14,10 +14,12 @@
 
 ## connectionRequestRouter
 
--POST/request/send/intrested/:userID
--POST/request/send/ignored/:userID
--POST/request/review/accepted/:requestID
--POST/request/review/rejected/:requestID
+<!-- igonred & interested -->
+-POST/request/send/:status/:userID  
+ 
+<!-- accepted & rejected -->
+-POST/request/review/:status/:requestID
+
 
 ## userRouter
 
