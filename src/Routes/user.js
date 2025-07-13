@@ -2,6 +2,7 @@ const express = require("express");
 const userRouter = express.Router();
 const { userAuth } = require("../Middleware/Auth");
 const ConnectionRequest = require("../models/connectionRequest");
+const User = require("../models/user");
 const { connect } = require("mongoose");
 
 const USER_SAFE_DATA = "firstName lastName photoUrl age skills about gender";
@@ -56,6 +57,36 @@ userRouter.get("/user/connections" , userAuth , async(req,res) => {
         res.status(400).send("ERROR :" + err.message);
     }
 
+});
+
+userRouter.get("/user/feed" , userAuth , async(req,res) => {
+    try{
+        const loggedInUser = req.user;
+        const connectionRequests = await ConnectionRequest.find({
+            $or:[
+                {fromUserId : loggedInUser._id},
+                {toUserId : loggedInUser._id}
+            ]
+        }).select("fromUserId toUserId");
+
+        const hideUsersFromFeed = new Set();
+        connectionRequests.forEach((request) => {
+            hideUsersFromFeed.add(request.fromUserId.toString());
+            hideUsersFromFeed.add(request.toUserId.toString());
+        });
+
+        const user = await User.find({
+            $and: [
+                { _id: { $ne: loggedInUser._id } }, // Exclude the logged-in user
+                { _id: { $nin: Array.from(hideUsersFromFeed) } }, // Exclude users in connection requests
+            ]
+        }).select(USER_SAFE_DATA);
+
+        res.send(user);
+
+    }catch(err){
+        res.status(400).send("ERROR :" + err.message);
+    }
 });
 
 
