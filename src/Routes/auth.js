@@ -14,8 +14,6 @@ authRouter.post("/signup", async (req, res) => {
 
     const passwordHash = await bcrypt.hash(password, 10);
 
-    console.log(passwordHash);
-
     // creating new instance of the user model
     const user = new User({
       firstName,
@@ -24,8 +22,16 @@ authRouter.post("/signup", async (req, res) => {
       password: passwordHash,
     });
 
-    await user.save();
-    res.send("User added sucessfully !!!!");
+    const savedUser = await user.save();
+
+    const token = await savedUser.getJWT();
+
+      // Add JWT token to cookies and send the response to user
+      res.cookie("token", token, {
+        expires: new Date(Date.now() + 8 * 3600000),
+      });
+
+    res.json({message: "User added sucessfully !!!!" , data: savedUser});
   } catch (err) {
     res.status(400).send("ERROR :" + err.message);
   }

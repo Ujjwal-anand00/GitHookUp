@@ -3,7 +3,7 @@ const userRouter = express.Router();
 const { userAuth } = require("../Middleware/Auth");
 const ConnectionRequest = require("../models/connectionRequest");
 const User = require("../models/user");
-const { connect } = require("mongoose");
+
 
 const USER_SAFE_DATA = "firstName lastName photoUrl age skills about gender";
 
@@ -15,11 +15,11 @@ userRouter.get("/user/request/received" ,userAuth , async(req,res) => {
             toUserId: loggedInUser._id,
             status: "interested",
         }).populate("fromUserId", USER_SAFE_DATA);
-        if(!connectionRequest || connectionRequest.length === 0){
-            return res.status(404).json({
-                message: "No connection requests found",
-            });
-        }
+        // if(!connectionRequest || connectionRequest.length === 0){
+        //     return res.status(404).json({
+        //         message: "No connection requests found",
+        //     });
+        // }
         res.json({
             message: "All the connection requests",
             data: connectionRequest,

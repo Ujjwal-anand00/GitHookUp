@@ -51,7 +51,7 @@ const userSchema = new mongoose.Schema({
     },
     photoUrl:{
         type:String,
-        default : "https://www.pnrao.com/wp-content/uploads/2023/06/dummy-user-male.jpg",
+        default : "https://www.pngitem.com/pimgs/m/35-350426_profile-icon-png-default-profile-picture-png-transparent.png",
         validate(value){
             if(!validator.isURL(value))
             {
@@ -65,6 +65,7 @@ const userSchema = new mongoose.Schema({
     },
     skills:{
         type:[String],
+        default : [],
     },
 
 },

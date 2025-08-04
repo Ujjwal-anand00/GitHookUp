@@ -4,16 +4,21 @@ const User = require("../models/user");
 const userAuth = async (req, res, next) => {
   try {
     // read the token from the req cookies
+
+
+
     const { token } = req.cookies;
     if(!token){
-        throw new Error("Token not valid !!");
+        return res.status(401).send("You are not authenticated !!");
     }
 
     // validate the token
 
     const decodedObj = await jwt.verify(token, "DEV@Tinder$790");
+    
 
     const { _id } = decodedObj;
+
 
     // find the user
 

@@ -17,18 +17,25 @@ const validateEditProfileData = (req) => {
     "firstName",
     "lastName",
     "about",
-    "location",
-    "profilePicture",
     "age",
     "gender",
     "skills",
     "photoUrl",
   ];
-  const isEditAllowed = Object.keys(req.body).every((field) =>
-    allowedEditFields.includes(field)
+
+  const invalidFields = Object.keys(req.body).filter(
+    (field) => !allowedEditFields.includes(field)
   );
-  return isEditAllowed;
+
+  if (invalidFields.length > 0) {
+    throw new Error(
+      `You are not allowed to edit these fields: ${invalidFields.join(", ")}`
+    );
+  }
+
+  return true;
 };
+
 
 module.exports = {
   validateSignUpData,
