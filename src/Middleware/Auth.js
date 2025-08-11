@@ -7,7 +7,7 @@ const userAuth = async (req, res, next) => {
 
 
 
-    const { token } = req.cookies;
+    let { token } = req.cookies;
     if(!token){
         return res.status(401).send("You are not authenticated !!");
     }
